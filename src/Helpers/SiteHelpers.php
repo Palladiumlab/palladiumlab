@@ -6,23 +6,13 @@ namespace Palladiumlab\Helpers;
 
 class SiteHelpers
 {
-    public static function getDressCount()
-    {
-        return $count = 10800 + (round((NOW - strtotime('2017-10-07')) / 86400) * 3);
-    }
-
-    public static function setCookie($key, $val = false, $time = 31536000)
-    {
-        return setcookie($key, $val, NOW + $time, '/', server()->getServerName(), get_protocol());
-    }
-
-    public static function getPhoneForLink()
+    public static function getPhoneForLink($includePath = 'include/config/phone_tag.php')
     {
         ob_start();
         global $APPLICATION;
         $APPLICATION->IncludeComponent("bitrix:main.include", "", [
             "AREA_FILE_SHOW" => "file",
-            "PATH" => SITE_DIR . "include/config/phone_tag.php"
+            "PATH" => SITE_DIR . $includePath
         ]);
         $phone = ob_get_clean();
         // Strip HTML Tags
@@ -38,6 +28,6 @@ class SiteHelpers
         // Trim the string of leading/trailing space
         $phone = trim($phone);
 
-        return "+{$phone}";
+        return starts_with($phone, '8') ? $phone : "+{$phone}";
     }
 }
