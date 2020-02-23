@@ -3,14 +3,16 @@
 use Bitrix\Main\Application;
 use Bitrix\Main\Context;
 use Bitrix\Main\Page\Asset;
-use Palladiumlab\Helpers\ImageHelpers;
+use Palladiumlab\Helpers\Bitrix\ImageHelpers;
+use Palladiumlab\Helpers\Site;
+use Palladiumlab\Helpers\System\Debug;
 
 if (!function_exists('restart_buffer')) {
     function restart_buffer()
     {
-        ob_end_clean();
         global $APPLICATION;
         $APPLICATION->RestartBuffer();
+        $APPLICATION->RestartWorkarea();
     }
 }
 
@@ -22,38 +24,46 @@ if (!function_exists('ddr')) {
     }
 }
 
-if (!function_exists('asset')) {
-    function asset()
+if (!function_exists('bitrix_asset')) {
+    function bitrix_asset()
     {
         return Asset::getInstance();
     }
 }
 
-if (!function_exists('bapp')) {
-    function bapp()
+if (!function_exists('bitrix_app')) {
+    function bitrix_app()
     {
         return Application::getInstance();
     }
 }
 
-if (!function_exists('context')) {
-    function context()
+if (!function_exists('bitrix_global_app')) {
+    function bitrix_global_app()
+    {
+        global $APPLICATION;
+        return $APPLICATION;
+    }
+}
+
+if (!function_exists('bitrix_context')) {
+    function bitrix_context()
     {
         return Context::getCurrent();
     }
 }
 
-if (!function_exists('server')) {
-    function server()
+if (!function_exists('bitrix_server')) {
+    function bitrix_server()
     {
-        return context()->getServer();
+        return bitrix_context()->getServer();
     }
 }
 
-if (!function_exists('request')) {
-    function request()
+if (!function_exists('bitrix_request')) {
+    function bitrix_request()
     {
-        return context()->getRequest();
+        return bitrix_context()->getRequest();
     }
 }
 
@@ -61,14 +71,14 @@ if (!function_exists('host_url')) {
     function host_url($withoutLastSlash = false)
     {
         $lastSlash = $withoutLastSlash ? '' : '/';
-        return get_protocol() . server()->getServerName() . $lastSlash;
+        return get_protocol() . bitrix_server()->getServerName() . $lastSlash;
     }
 }
 
 if (!function_exists('get_protocol')) {
     function get_protocol()
     {
-        return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+        return bitrix_request()->isHttps() ? "https://" : "http://";
     }
 }
 
@@ -93,18 +103,9 @@ if (!function_exists('get_canonical')) {
 if (!function_exists('price_formatted')) {
     function price_formatted($price, $thousandsSep = ' ')
     {
-        // Strip HTML Tags
-        $price = strip_tags($price);
-        // Clean up things like &amp;
-        $price = html_entity_decode($price);
-        // Strip out any url-encoded stuff
-        $price = urldecode($price);
+        $price = Site::getSafetyString($price);
         // Replace all not-digits with empty string
         $price = preg_replace('/\D+/', '', $price);
-        // Replace Multiple spaces with empty string
-        $price = preg_replace('/ +/', '', $price);
-        // Trim the string of leading/trailing space
-        $price = trim($price);
 
         return number_format((float)$price, 0, ',', $thousandsSep);
     }
@@ -162,5 +163,24 @@ if (!function_exists('get_image_resize')) {
     function get_image_resize(int $imageId)
     {
         return ImageHelpers::getResizePath($imageId);
+    }
+}
+
+if (!function_exists('get_transliterate')) {
+    function get_transliterate(string $value, string $lang = '')
+    {
+        return trim(Site::transliterate(toLower($value), !empty($lang) ? $lang : LANGUAGE_ID, [
+            "change_case" => 'L', // 'L' - toLower, 'U' - toUpper, false - do not change
+            "replace_space" => '-',
+            "replace_other" => '-',
+            "delete_repeat_replace" => true,
+        ]), ' -');
+    }
+}
+
+if (!function_exists('debugLogger')) {
+    function debugLogger()
+    {
+        return Debug::getLogger();
     }
 }

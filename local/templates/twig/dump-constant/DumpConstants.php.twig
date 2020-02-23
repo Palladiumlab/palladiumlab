@@ -1,0 +1,91 @@
+<?php
+
+/**
+ * Сгенерировано console deploy:dump-constants
+ * ВНИМАНИЕ!!! Файл генерируется автоматически. Все внесенные в этот файл изменения
+ * могут быть удалены.
+ */
+
+{% if iblocks is defined %}
+/**
+ * ----------------------------------------
+ * Константы инфоблоков
+ * ----------------------------------------
+ */
+
+{% for type, iblocks in iblocks %}
+/**
+ * ТИП ИБ: {{ type }}
+ */
+    {% for iblock in iblocks %}
+    // Инфоблок {{ iblock.name }}, Сайт: {{ iblock.site_id }}
+    define ('{{ iblock.code }}', {{ iblock.id }});
+    {% endfor %}
+
+{% endfor %}
+{% endif %}
+
+{% if hlblocks is defined %}
+/**
+ * ----------------------------------------
+ * Константы highload-блоков
+ * ----------------------------------------
+ */
+
+{% for highloadblock in hlblocks %}
+    // Highload-блок {{ highloadblock.name }}
+    define ('{{ highloadblock.code }}', {{ highloadblock.id }});
+{% endfor %}
+{% endif %}
+
+{% if webForms is defined %}
+/**
+ * ----------------------------------------
+ * Константы Web Form
+ * ----------------------------------------
+ */
+
+{% for webForm in webForms %}
+    // Web-форма {{ webForm.name }}
+    define ('{{ webForm.code }}', {{ webForm.id }});
+{% endfor %}
+{% endif %}
+
+{% if prices is defined %}
+/**
+ * ----------------------------------------
+ * Константы типов цен
+ * ----------------------------------------
+ */
+
+{% for price in prices %}
+    // Тип цены {{ price.name }}
+    define ('{{ price.code }}', {{ price.id }});
+{% endfor %}
+{% endif %}
+
+{% if services is defined %}
+/**
+ * ----------------------------------------
+ * Константы типов доставки
+ * ----------------------------------------
+ */
+
+{% for service in services %}
+    // Тип доставки {{ service.name }}
+    define ('{{ service.code }}', {{ service.id }});
+{% endfor %}
+{% endif %}
+
+{% if paySystems is defined %}
+/**
+ * ----------------------------------------
+ * Константы платёжных систем
+ * ----------------------------------------
+ */
+
+{% for paySystem in paySystems %}
+    // Платёжная система {{ paySystem.name }}
+    define ('{{ paySystem.code }}', {{ paySystem.id }});
+{% endfor %}
+{% endif %}

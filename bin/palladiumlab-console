@@ -1,0 +1,23 @@
+#!/usr/bin/env php
+<?php
+
+use Symfony\Component\Console\Application;
+
+define('NO_AGENT_CHECK', true);
+define('NOT_CHECK_PERMISSIONS', true);
+define("PERFMON_STOP", true);
+define('ROOT_DIR', dirname(__DIR__));
+define('LOG_PATH', ROOT_DIR . '/logs');
+define('CONSOLE_APPLICATION', true);
+
+set_time_limit(0);
+
+$_SERVER["DOCUMENT_ROOT"] = ROOT_DIR;
+
+require $_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_before.php";
+
+$app = new Application('palladiumlab');
+
+$app->add(new \Palladiumlab\Commands\Deploy\DumpConstants());
+
+$app->run();

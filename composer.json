@@ -17,7 +17,11 @@
         "vlucas/phpdotenv": "^3.5",
         "laravel/helpers": "^1.1",
         "monolog/monolog": "^2.0",
-        "symfony/console": "^4.0"
+        "symfony/console": "^4.0",
+        "symfony2admingenerator/twig-generator": "^1.3",
+        "twig/twig": "^2.9",
+        "illuminate/events": "^5.0",
+        "philo/laravel-blade": "^3.1"
     },
     "autoload": {
         "psr-4": {
@@ -27,9 +31,9 @@
             ]
         },
         "files": [
-            "php_interface/functions.php",
-            "php_interface/load.php",
-            "php_interface/const.php"
+            "local/php_interface/functions.php",
+            "local/php_interface/load.php",
+            "local/php_interface/const.php"
         ]
     },
     "repositories": [
@@ -37,5 +41,6 @@
             "type": "vcs",
             "url": "https://github.com/Palladiumlab/palladiumlab.git"
         }
-    ]
+    ],
+    "bin": ["bin/palladiumlab-console"]
 }
