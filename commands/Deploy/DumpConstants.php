@@ -134,7 +134,7 @@ class DumpConstants extends Command
                     $result[] = [
                         'name' => $webForm['SID'],
                         'code' => 'WEBFORM_' . mb_strtoupper($webForm['SID']) . '_SID',
-                        'id' => $webForm['SID'],
+                        'id' => '"' . $webForm['SID'] . '"',
                     ];
                 }
             }
@@ -162,7 +162,7 @@ class DumpConstants extends Command
                     $result[] = [
                         'name' => $price['NAME'],
                         'code' => 'PRICE_' . mb_strtoupper($price['NAME']) . '_CODE',
-                        'id' => $price['NAME'],
+                        'id' => '"' . $price['NAME'] . '"',
                     ];
                 }
             }
