@@ -18,6 +18,7 @@ class DumpConstants extends Command
     protected $templatePath = ROOT_DIR . '/local/templates/twig/dump-constant/';
     protected $outputName = 'const.php';
     protected $outputDir = ROOT_DIR . '/local/php_interface';
+    protected $templateName = 'DumpConstants.php.twig';
 
     protected function configure()
     {
@@ -32,6 +33,7 @@ class DumpConstants extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $builder = $this->getBuilder();
+	$builder->setTemplateName($this->templateName);
         $builder->setOutputName($this->outputName);
         foreach ($this->getVariables() as $variable => $method) {
             if ($variableResult = $this->$method()) {
