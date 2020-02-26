@@ -19,4 +19,25 @@ class ComponentHelpers
             }
         }
     }
+
+    public static function menuConversion(array $menuItems)
+    {
+        if (!empty($menuItems)) {
+            $formattedResult = [];
+            $parents = [];
+            foreach ($menuItems as $index => $item) {
+                if (empty($parents) || $item['DEPTH_LEVEL'] === 1) {
+                    $parent = &$formattedResult;
+                } else {
+                    $parent = &$parents[$item['DEPTH_LEVEL'] - 1];
+                }
+                $parent['CHILDREN'][$index] = $item;
+                if ($item['IS_PARENT']) {
+                    $parents[$item['DEPTH_LEVEL']] = &$parent['CHILDREN'][$index];
+                }
+            }
+            return $formattedResult['CHILDREN'];
+        }
+        return $menuItems;
+    }
 }
